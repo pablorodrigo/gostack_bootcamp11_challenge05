@@ -24,7 +24,30 @@ class TransactionsRepository {
   }
 
   public getBalance(): Balance {
-    // TODO
+    const balance = this.transactions.reduce(
+      (accumalator: Balance, transaction) => {
+        switch (transaction.type) {
+          case 'income':
+            accumalator.income += transaction.value;
+            accumalator.total +=transaction.value;
+            break;
+          case 'outcome':
+            accumalator.outcome += transaction.value;
+            accumalator.total -=transaction.value;
+            break;
+          default:
+            break;
+        }
+        return accumalator;
+      },
+      {
+        income: 0,
+        outcome: 0,
+        total: 0,
+      },
+    );
+
+    return balance;
   }
 
   public create({ title, value, type }: CreateTransaction): Transaction {
