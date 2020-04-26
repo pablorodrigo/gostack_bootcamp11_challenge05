@@ -19,6 +19,13 @@ class CreateTransactionService {
       throw Error('Please select if it is a income or outcome');
     }
 
+    if (
+      type === 'outcome' &&
+      this.transactionsRepository.getBalance().total < value
+    ) {
+      throw Error('You do not have money');
+    }
+
     return this.transactionsRepository.create({ title, value, type });
   }
 }
